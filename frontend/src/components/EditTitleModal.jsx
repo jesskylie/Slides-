@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import TextField from '@mui/material/TextField';
-import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -19,11 +20,9 @@ const style = {
   p: 4,
 };
 
-export default function NewPresentationButton ({ token }) {
+export default function EditTitleModal ({ token, presentationId }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const navigate = useNavigate();
@@ -32,17 +31,7 @@ export default function NewPresentationButton ({ token }) {
     setTitle(e.target.value);
   }
 
-  const handleNewDescription = (e) => {
-    setDescription(e.target.value);
-  }
-
-  function getRandomInt (min = 0, max = 1000) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  const createNewPresentation = async () => {
+  const updateTitleName = async () => {
     try {
       // get old store
       const response = await axios.get('http://localhost:5005/store', {
@@ -58,33 +47,30 @@ export default function NewPresentationButton ({ token }) {
 
       // create copy of old store
       const newStore = { ...currStore };
-
-      // send back new store to replace old store
-      const newData = {
-        presentationId: getRandomInt(),
-        title: newTitle,
-        description,
-        slides: []
+      // Loop through the indexs of the newStore
+      for (const index in newStore) {
+        const presentationIdAsString = newStore[index].presentationId.toString();
+        if (presentationIdAsString === presentationId) {
+          newStore[index].title = newTitle;
+        }
       }
-
-      newStore[`${newData.title}`] = newData;
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
         }
       });
+      navigate(`/dashboard/${presentationId}/${newTitle}`);
+      console.log(9);
       handleClose();
-      navigate(`/dashboard/${newData.presentationId}/${newData.title}`);
     } catch (error) {
       alert(error.response.data.error);
     }
   }
 
   return (
-      <div>
-        <Button onClick={handleOpen}>New Presentation</Button>
-        <Modal
+    <>
+      <ModeEditIcon onClick={handleOpen} style={{ fontSize: '0.6em', cursor: 'pointer', paddingLeft: '8px' }}></ModeEditIcon>
+      <Modal
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
@@ -92,7 +78,7 @@ export default function NewPresentationButton ({ token }) {
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              New Presentation
+              Edit title
             </Typography>
             <TextField
                 id="outlined-basic"
@@ -101,16 +87,9 @@ export default function NewPresentationButton ({ token }) {
                 value={title}
                 onChange={handleNewTitle}
             />
-            <TextField
-                id="outlined-basic"
-                label="Description"
-                variant="outlined"
-                value={description}
-                onChange={handleNewDescription}
-            />
-            <Button onClick={createNewPresentation}>Create</Button>
+            <Button onClick={updateTitleName}>Update</Button>
           </Box>
         </Modal>
-      </div>
+    </>
   );
 }

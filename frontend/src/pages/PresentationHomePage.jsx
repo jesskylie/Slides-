@@ -1,17 +1,18 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import DeletePrompt from '../components/DeletePrompt'
+import EditTitleModal from '../components/EditTitleModal'
+import NewSlideButton from '../components/NewSlideButton';
 
-export default function Slides () {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const title = searchParams.get('title');
+export default function PresentationHomePage ({ token, setTokenFunction }) {
+  const { presentationId, title } = useParams();
   const navigate = useNavigate();
+
   const gotoDashboard = () => {
     navigate('/dashboard');
   }
@@ -19,7 +20,7 @@ export default function Slides () {
   return (
     <>
         <NavBar/>
-        <h1 style={{ textAlign: 'center' }}>{title}</h1>
+        <h1 style={{ textAlign: 'center' }}>{title}<EditTitleModal token={token} presentationId={presentationId}/></h1>
 
         <Card variant="outlined" sx={{ minWidth: 275, minHeight: 500 }}>
             <CardContent>
@@ -28,7 +29,8 @@ export default function Slides () {
             </CardContent>
         </Card>
         <Button onClick={gotoDashboard}>Back</Button>
-        <DeletePrompt></DeletePrompt>
+        <DeletePrompt token={token} presentationId={presentationId}></DeletePrompt>
+        <NewSlideButton token={token} presentationId={presentationId} title={title}></NewSlideButton>
     </>
   )
 }
