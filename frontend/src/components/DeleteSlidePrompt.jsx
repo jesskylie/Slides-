@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function DeletePrompt ({ token, presentationId }) {
+export default function DeleteSlidePrompt ({ token, slideId, presentationId }) {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const handleClickOpen = () => {
@@ -17,7 +17,7 @@ export default function DeletePrompt ({ token, presentationId }) {
     setOpen(false);
   };
 
-  const handleCloseDelete = async () => {
+  const handleCloseDeleteSlide = async () => {
     try {
       // get old store
       const response = await axios.get('http://localhost:5005/store', {
@@ -26,15 +26,18 @@ export default function DeletePrompt ({ token, presentationId }) {
         }
       });
       const currStore = response.data.store.store;
-      console.log(presentationId)
       // create copy of old store
       const newStore = { ...currStore };
-      console.log('New store before delete', JSON.stringify(newStore))
-      // Loop through the indexs of the newStore
+      // Loop through the indexes of the newStore
       for (const index in newStore) {
         const presentationIdAsString = newStore[index].presentationId.toString();
         if (presentationIdAsString === presentationId) {
-          delete newStore[index];
+          const slideIdToFind = newStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
+          console.log(slideId);
+          console.log(slideIdToFind);
+          if (slideIdToFind !== -1) {
+            newStore[index].slides.splice(slideIdToFind, 1);
+          }
         }
       }
 
@@ -51,26 +54,26 @@ export default function DeletePrompt ({ token, presentationId }) {
   }
 
   return (
-    <React.Fragment>
-      <Button onClick={handleClickOpen}>
-        Delete
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure'}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose}>No</Button>
-          <Button onClick={handleCloseDelete} autoFocus>
-            Yes
+        <React.Fragment>
+          <Button onClick={handleClickOpen}>
+            Delete Slide
           </Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {'Are you sure'}
+            </DialogTitle>
+            <DialogActions>
+              <Button onClick={handleClose}>No</Button>
+              <Button onClick={handleCloseDeleteSlide} autoFocus>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </React.Fragment>
   );
 }
