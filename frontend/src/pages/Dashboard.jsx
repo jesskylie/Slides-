@@ -21,9 +21,11 @@ export default function Dashboard ({ token, setTokenFunction }) {
   }, [])
 
   useEffect(() => {
-    const presentationsArray = Object.values(store);
-    setPresentation(presentationsArray);
-    console.log(presentationsArray);
+    if (store && Object.keys(store).length !== 0) {
+      const presentationsArray = Object.values(store);
+      setPresentation(presentationsArray);
+      console.log(presentationsArray);
+    }
   }, [store])
 
   if (token === null) {

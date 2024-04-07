@@ -26,6 +26,7 @@ function App () {
       <Route path="/" element={<HomePage/>} />
         <Route path="/dashboard" element={<Dashboard token={token} setTokenFunction={setTokenAbstract}/>} />
         <Route path="/dashboard/:presentationId/:title" element={<PresentationHomePage token={token} setTokenFunction={setTokenAbstract}/>}/>
+        <Route path="/dashboard/:presentationId/" element={<PresentationHomePage token={token} setTokenFunction={setTokenAbstract}/>}/>
         <Route path="/dashboard/:presentationId/:title/:slideId" element={<SlidesPage token={token} setTokenFunction={setTokenAbstract}/>}/>
           <Route path="/register" element={<Register token={token} setTokenFunction={setTokenAbstract}/>} />
           <Route path="/login" element={<Login token={token} setTokenFunction={setTokenAbstract}/>} />

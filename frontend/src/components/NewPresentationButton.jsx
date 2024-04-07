@@ -19,7 +19,7 @@ const style = {
   p: 4,
 };
 
-export default function NewPresentationButton ({ token }) {
+export default function NewPresentationButton ({ token, setToken }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
