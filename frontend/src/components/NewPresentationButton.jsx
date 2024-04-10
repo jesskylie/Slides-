@@ -60,11 +60,15 @@ export default function NewPresentationButton ({ token, setToken }) {
       const newStore = { ...currStore };
 
       // send back new store to replace old store
+      const newSlideId = getRandomInt();
       const newData = {
         presentationId: getRandomInt(),
         title: newTitle,
         description,
-        slides: []
+        slides: [{
+          slideId: newSlideId,
+          text: [],
+        }]
       }
 
       newStore[`${newData.title}`] = newData;
@@ -75,7 +79,7 @@ export default function NewPresentationButton ({ token, setToken }) {
         }
       });
       handleClose();
-      navigate(`/dashboard/${newData.presentationId}/${newData.title}`);
+      navigate(`/dashboard/${newData.presentationId}/${newData.title}/${newSlideId}`);
     } catch (error) {
       alert(error.response.data.error);
     }

@@ -27,7 +27,8 @@ export default function NewSlideButton ({ token, presentationId, title }) {
       const newStore = { ...currStore }; // copy current data store to new data store
       const newSlideId = getRandomInt();
       const newSlideData = {
-        slideId: newSlideId
+        slideId: newSlideId,
+        text: [],
       }
 
       for (const index in newStore) {

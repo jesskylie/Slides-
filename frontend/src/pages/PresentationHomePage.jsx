@@ -12,7 +12,7 @@ import RightKey from '../components/RightKey';
 import axios from 'axios';
 import EditSideBar from '../components/EditSideBar';
 
-export default function PresentationHomePage ({ token, setTokenFunction }) {
+export default function PresentationHomePage ({ token, setTokenFunction, text }) {
   const { presentationId, title, slideId } = useParams();
   const [rightKey, setRightKey] = useState(false);
   const navigate = useNavigate();
@@ -39,10 +39,12 @@ export default function PresentationHomePage ({ token, setTokenFunction }) {
     })
   }, [])
 
+  // const [addTextState, setAddTextState] = useState(false);
+
   return (
     <>
         <NavBar/>
-        <EditSideBar></EditSideBar>
+        <EditSideBar token={token} presentationId={presentationId} slideId={slideId}></EditSideBar>
         <h1 style={{ textAlign: 'center' }}>{title}<EditTitleModal token={token} presentationId={presentationId}/></h1>
         <div style={{ position: 'relative' }}>
            <Card variant="outlined" sx={{ minWidth: 275, minHeight: 500 }}>

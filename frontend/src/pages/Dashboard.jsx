@@ -47,6 +47,7 @@ export default function Dashboard ({ token, setTokenFunction }) {
               title={presentations.title}
               description={presentations.description}
               numSlides={presentations.slides.length}
+              slideId={presentations.slides[0].slideId}
             />
           ))
           }
