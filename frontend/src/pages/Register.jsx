@@ -25,10 +25,10 @@ export default function Register ({ token, setTokenFunction }) {
         password,
         name
       });
-      setTokenFunction(response.data);
+      setTokenFunction(response.data.token);
       navigate('/dashboard');
     } catch (error) {
-      console.log(error.response.data.error);
+      alert(error.response.data.error);
     }
   }
 
@@ -39,7 +39,7 @@ export default function Register ({ token, setTokenFunction }) {
 
   return (
       <>
-        <NavBar></NavBar>
+        <NavBar token={token} setToken={setTokenFunction}></NavBar>
         <form onSubmit={handleRegisterSubmit}>
           <label>
              Email:
@@ -55,7 +55,7 @@ export default function Register ({ token, setTokenFunction }) {
           <label>
             Name: <input type="text" onChange={e => setName(e.target.value)} value={name}/><br />
           </label>
-            <button onClick={register}>Register</button>
+            <button type="submit">Register</button>
         </form>
 
       </>

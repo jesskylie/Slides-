@@ -36,6 +36,6 @@ export default function LeftKey ({ slideId, presentationId, title, token }) {
   }
 
   return (
-    <ArrowBackIcon onClick={handlePreviousPage} style={{ cursor: 'pointer' }}></ArrowBackIcon>
+    <ArrowBackIcon onClick={handlePreviousPage} style={{ cursor: 'pointer', paddingLeft: '50px' }}></ArrowBackIcon>
   )
 }

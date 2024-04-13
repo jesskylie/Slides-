@@ -68,6 +68,7 @@ export default function NewPresentationButton ({ token, setToken }) {
         slides: [{
           slideId: newSlideId,
           text: [],
+          image: [],
         }]
       }
 
@@ -87,7 +88,7 @@ export default function NewPresentationButton ({ token, setToken }) {
 
   return (
       <div>
-        <Button onClick={handleOpen}>New Presentation</Button>
+        <Button variant="contained" size="small" onClick={handleOpen}>New Presentation</Button>
         <Modal
           open={open}
           onClose={handleClose}

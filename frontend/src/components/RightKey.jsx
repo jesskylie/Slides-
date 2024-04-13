@@ -33,6 +33,6 @@ export default function RightKey ({ slideId, presentationId, title, token }) {
   }
 
   return (
-    <ArrowForwardIcon onClick={handleNextPage} style={{ cursor: 'pointer' }}></ArrowForwardIcon>
+    <ArrowForwardIcon onClick={handleNextPage} style={{ cursor: 'pointer', paddingLeft: '60px' }}></ArrowForwardIcon>
   )
 }

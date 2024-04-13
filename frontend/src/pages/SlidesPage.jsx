@@ -14,15 +14,18 @@ import DeletePresentationPrompt from '../components/DeletePresentationPrompt'
 import Button from '@mui/material/Button';
 import NewSlideButton from '../components/NewSlideButton';
 import TextBox from '../components/TextBox';
+import Image from '../components/Image';
 
 export default function SlidesPage ({ token, setTokenFunction }) {
   const { presentationId, title, slideId } = useParams();
-  const [lastPage, setLastPage] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [confirmClicked, setConfirmClicked] = useState(false);
-  const [text, setText] = useState('');
-  const [colour, setColour] = useState('');
-  const [fontSize, setFontSize] = useState('');
+  const [pageNumber, setPageNumber] = useState('');
+  const [confirmClickedText, setConfirmClickedText] = useState(false);
+  const [confirmClickedImage, setConfirmClickedImage] = useState(false);
+  const [slideIndex, setSlideIndex] = useState('');
+  const [rightSlideIndex, setRightSlideIndex] = useState(false);
+  const [slideLength, setSlideLength] = useState('');
+  const [text, setText] = useState([]);
+  const [image, setImage] = useState([]);
 
   const navigate = useNavigate();
 
@@ -30,45 +33,75 @@ export default function SlidesPage ({ token, setTokenFunction }) {
     navigate('/dashboard');
   }
 
-  const handleConfirmClick = () => {
-    setConfirmClicked(true);
+  const handleConfirmClickText = () => {
+    setConfirmClickedText(true);
+  };
+
+  const handleConfirmClickImage = () => {
+    setConfirmClickedImage(true);
   };
 
   useEffect(() => {
-    const getText = async () => {
+    const getTextAndImage = async () => {
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
           Authorization: token
         }
       })
       const currStore = response.data.store.store;
+      const newText = [];
+      const newImage = [];
       for (const index in currStore) {
         if (currStore[index].presentationId.toString() === presentationId) {
-          const slideIndex = currStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
-          if (slideIndex !== -1) {
-            setText(currStore[index].slides[slideIndex].text[0].text)
-            setFontSize(currStore[index].slides[slideIndex].text[0].fontSize)
-            setColour(currStore[index].slides[slideIndex].text[0].textColour)
+          const slide = currStore[index].slides.find(slide => slide.slideId.toString() === slideId);
+          if (slide !== -1) {
+            if (slide.text) {
+              slide.text.forEach(text => {
+                newText.push({
+                  slideId: slide.slideId,
+                  textId: text.textId,
+                  text: text.text,
+                  fontSize: text.fontSize,
+                  textColour: text.textColour,
+                  sizeWidth: text.sizeWidth,
+                  sizeHeight: text.sizeHeight
+                })
+              })
+            }
+            if (slide.image) {
+              slide.image.forEach(image => {
+                newImage.push({
+                  slideId: slide.slideId,
+                  imageId: image.imageId,
+                  sizeWidth: image.sizeWidth,
+                  sizeHeight: image.sizeHeight,
+                  imageURL: image.imageURL,
+                  imageDescription: image.imageDescription
+                })
+              })
+            }
           }
         }
       }
+      setText(newText)
+      setImage(newImage);
     }
 
-    if (confirmClicked) {
-      getText();
-      // Reset confirmClicked state
-      setConfirmClicked(false);
+    if (confirmClickedText || slideId) {
+      getTextAndImage();
+      setConfirmClickedText(false);
     }
-  }, [confirmClicked]);
+
+    if (confirmClickedImage) {
+      getTextAndImage();
+      setConfirmClickedImage(false);
+    }
+  }, [confirmClickedText, confirmClickedImage, slideId]);
 
   const onDelete = (event) => {
     if (event) {
-      event.preventDefault(); // Prevent the default context menu from appearing
-      // go delete the text
+      event.preventDefault();
     }
-
-    // Perform deletion logic here, such as removing the element from state
-    // or making an API request to delete the element from the server
     console.log('Element deleted');
   };
 
@@ -83,11 +116,15 @@ export default function SlidesPage ({ token, setTokenFunction }) {
       Object.keys(currStore).forEach(key => {
         if (currStore[key].presentationId.toString() === presentationId) {
           const currSlideIndex = currStore[key].slides.findIndex(slide => slide.slideId.toString() === slideId);
-          if (currSlideIndex === currStore[key].slides.length - 1) {
-            setLastPage(true);
+          if (currSlideIndex === 0) {
+            setSlideIndex(true);
           }
-          console.log(currSlideIndex)
+          if (currStore[key].slides.length > 1) {
+            setRightSlideIndex(true);
+          }
           setPageNumber(currSlideIndex + 1);
+          setSlideIndex(currSlideIndex);
+          setSlideLength(currStore[key].slides.length)
         }
       })
     } catch (error) {
@@ -97,20 +134,43 @@ export default function SlidesPage ({ token, setTokenFunction }) {
 
   useEffect(() => {
     handleRightKey();
-    console.log(lastPage);
   }, [slideId])
 
   // render current slide
   return (
         <>
          <NavBar/>
-         <EditSideBar token={token} presentationId={presentationId} slideId={slideId} onConfirmClick={handleConfirmClick}></EditSideBar>
+         <EditSideBar token={token} presentationId={presentationId} slideId={slideId} onConfirmClickText={handleConfirmClickText} onConfirmClickImage={handleConfirmClickImage}></EditSideBar>
         <h1 style={{ textAlign: 'center' }}>{title}<EditTitleModal token={token} presentationId={presentationId}/></h1>
         <div style={{ position: 'relative' }}>
-             <Card variant="outlined" sx={{ minWidth: 275, minHeight: 500 }}>
+             <Card variant="outlined" sx={{ width: 1000, height: 500, borderWidth: 1.3 }}>
             <CardContent>
                 <Typography variant="h5" component="div">
-                    <TextBox text={text} fontSize={fontSize} colour={colour} onDelete={onDelete}/>
+                {text
+                  .filter(textItem => textItem.slideId.toString() === slideId)
+                  .map(textItem => (
+                    <TextBox
+                      key={textItem.textId}
+                      text={textItem.text}
+                      fontSize={textItem.fontSize}
+                      colour={textItem.textColour}
+                      width={textItem.sizeWidth}
+                      height= {textItem.sizeHeight}
+                      onDelete={onDelete}
+                    />
+                  ))}
+
+                  {image
+                    .filter(imageItem => imageItem.slideId && imageItem.slideId.toString() === slideId)
+                    .map(imageItem => (
+                        <Image
+                        key={imageItem.imageId}
+                        sizeWidth={imageItem.sizeWidth}
+                        sizeHeight={imageItem.sizeHeight}
+                          imageURL={imageItem.imageURL}
+                          imageDescription={imageItem.imageDescription}
+                        />
+                    ))}
                 </Typography>
                 <div style={{ position: 'absolute', left: '10px', bottom: '70px' }}>
               {pageNumber}
@@ -118,14 +178,19 @@ export default function SlidesPage ({ token, setTokenFunction }) {
             </CardContent>
         </Card>
         <DeleteSlidePrompt token={token} slideId={slideId} presentationId={presentationId} ></DeleteSlidePrompt>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button onClick={gotoDashboard}>Back</Button>
         <DeletePresentationPrompt token={token} presentationId={presentationId}/>
         <NewSlideButton token={token} presentationId={presentationId} title={title}></NewSlideButton>
-           <LeftKey slideId={slideId} presentationId={presentationId} title={title} token={token}></LeftKey>
-           <RightKey slideId={slideId} presentationId={presentationId} title={title} token={token}></RightKey>
+        {slideIndex > 0 && (
+          <LeftKey slideId={slideId} presentationId={presentationId} title={title} token={token}></LeftKey>
+        )}
+        {rightSlideIndex && (slideIndex !== slideLength - 1) && (
+          <>
+            <RightKey slideId={slideId} presentationId={presentationId} title={title} token={token}></RightKey>
+          </>
 
-        </div>
+        )}
+
         </div>
 
         </>

@@ -4,7 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
-import SlidesPage from './pages/SlidesPage'
+import SlidesPage from './pages/SlidesPage';
 
 function App () {
   let lsToken = null;

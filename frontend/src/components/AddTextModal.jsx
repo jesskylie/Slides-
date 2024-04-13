@@ -19,11 +19,13 @@ const style = {
   p: 4,
 };
 
-export default function AddTextModal ({ token, onConfirmClick }) {
+export default function AddTextModal ({ token, onConfirmClickText }) {
   const { presentationId, slideId } = useParams();
   const [text, setText] = useState('');
   const [fontSize, setFontSize] = useState('');
   const [textColour, setTextColour] = useState('');
+  const [sizeWidth, setSizeWidth] = useState('');
+  const [sizeHeight, setSizeHeight] = useState('');
   const handleNewText = (e) => {
     setText(e.target.value);
   }
@@ -34,13 +36,21 @@ export default function AddTextModal ({ token, onConfirmClick }) {
     setTextColour(e.target.value);
   }
 
+  const handleSizeWidth = (e) => {
+    setSizeWidth(e.target.value);
+  }
+
+  const handleSizeHeight = (e) => {
+    setSizeHeight(e.target.value);
+  }
+
   function getRandomInt (min = 0, max = 1000) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = async () => {
     try {
@@ -60,7 +70,9 @@ export default function AddTextModal ({ token, onConfirmClick }) {
               textId: getRandomInt(),
               text,
               fontSize,
-              textColour
+              textColour,
+              sizeWidth,
+              sizeHeight
             };
             newStore[index].slides[slideIndex].text.push(newText);
           }
@@ -72,7 +84,7 @@ export default function AddTextModal ({ token, onConfirmClick }) {
           Authorization: token
         }
       });
-      onConfirmClick();
+      onConfirmClickText();
       setOpen(false);
     } catch (error) {
       console.log(error)
@@ -91,6 +103,8 @@ export default function AddTextModal ({ token, onConfirmClick }) {
           <TextField id="outlined-basic" label="Text" value={text}variant="outlined" onChange={handleNewText}/>
           <TextField id="outlined-basic" label="Font Size" value={fontSize}variant="outlined" onChange={handleFontSize}/>
           <TextField id="outlined-basic" label="Text Colour" value={textColour}variant="outlined" onChange={handleTextColour}/>
+          <TextField id="outlined-basic" label="Size: width" value={sizeWidth}variant="outlined" onChange={handleSizeWidth}/>
+          <TextField id="outlined-basic" label="Size: height" value={sizeHeight}variant="outlined" onChange={handleSizeHeight}/>
           <Button onClick={handleClose}>Confirm</Button>
         </Box>
       </Modal>

@@ -8,7 +8,7 @@ import { Link, useLocation } from 'react-router-dom';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import LogoutButton from '../components/LogoutButton';
 
-export default function NavBar () {
+export default function NavBar ({ token, setToken }) {
   const location = useLocation();
   return (
     <Box sx={{ flexGrow: 1, marginBottom: '20px' }}>
@@ -19,7 +19,7 @@ export default function NavBar () {
             Slides
           </Typography>
           {location.pathname === '/dashboard'
-            ? (<LogoutButton></LogoutButton>)
+            ? (<LogoutButton token={token} setToken={setToken}></LogoutButton>)
             : location.pathname === '/' && (
           <>
             <Button color="inherit" component={Link} to="/login">Login</Button>

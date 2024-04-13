@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import LogoutButton from '../components/LogoutButton';
 import axios from 'axios';
 import NavBar from '../components/NavBar'
 import NewPresentationButton from '../components/NewPresentationButton';
@@ -35,8 +34,7 @@ export default function Dashboard ({ token, setTokenFunction }) {
 
   // else change to dashboard
   return <>
-        <NavBar ></NavBar>
-        <LogoutButton token={token} setToken={setTokenFunction}/><br></br>
+        <NavBar token={token} setToken={setTokenFunction}></NavBar>
         <h1>Dashboard</h1>
         <NewPresentationButton token={token} setToken={setTokenFunction}></NewPresentationButton>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>

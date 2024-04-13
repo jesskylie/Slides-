@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
+import Button from '@mui/material/Button';
 
 export default function Login ({ token, setTokenFunction }) {
   const [email, setEmail] = useState('');
@@ -18,9 +19,6 @@ export default function Login ({ token, setTokenFunction }) {
         email,
         password,
       });
-      console.log(response);
-      console.log(response.data);
-      console.log(response.data.token);
       setTokenFunction(response.data.token);
       navigate('/dashboard');
     } catch (error) {
@@ -35,7 +33,7 @@ export default function Login ({ token, setTokenFunction }) {
 
   return (
     <>
-     <NavBar ></NavBar>
+     <NavBar token={token}></NavBar>
      <form onSubmit={handleFormSubmit}>
       <label>
         Email:
@@ -44,7 +42,7 @@ export default function Login ({ token, setTokenFunction }) {
       <label>
         Password: <input type="text" onChange={e => setPassword(e.target.value)} value={password}/><br />
       </label>
-        <button type="submit">Login</button>
+        <Button type="submit" variant="contained" size="small">Login</Button>
      </form>
     </>
   )
