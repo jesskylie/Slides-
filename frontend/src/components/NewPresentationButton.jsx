@@ -69,6 +69,8 @@ export default function NewPresentationButton ({ token, setToken }) {
           slideId: newSlideId,
           text: [],
           image: [],
+          video: [],
+          code: [],
         }]
       }
 

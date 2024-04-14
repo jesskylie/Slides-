@@ -72,7 +72,8 @@ export default function AddTextModal ({ token, onConfirmClickText }) {
               fontSize,
               textColour,
               sizeWidth,
-              sizeHeight
+              sizeHeight,
+              layer: newStore[index].slides[slideIndex].text.length + 1 // Assign layer based on current image count
             };
             newStore[index].slides[slideIndex].text.push(newText);
           }

@@ -35,7 +35,15 @@ export default function LeftKey ({ slideId, presentationId, title, token }) {
     }
   }
 
+  const style = {
+    position: 'absolute',
+    bottom: 0,
+    right: 30,
+    textAlign: 'left',
+    cursor: 'pointer'
+  }
+
   return (
-    <ArrowBackIcon onClick={handlePreviousPage} style={{ cursor: 'pointer', paddingLeft: '50px' }}></ArrowBackIcon>
+    <ArrowBackIcon onClick={handlePreviousPage} style={style}></ArrowBackIcon>
   )
 }

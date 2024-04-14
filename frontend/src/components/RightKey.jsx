@@ -32,7 +32,15 @@ export default function RightKey ({ slideId, presentationId, title, token }) {
     }
   }
 
+  const style = {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    textAlign: 'left',
+    cursor: 'pointer'
+  };
+
   return (
-    <ArrowForwardIcon onClick={handleNextPage} style={{ cursor: 'pointer', paddingLeft: '60px' }}></ArrowForwardIcon>
+    <ArrowForwardIcon onClick={handleNextPage} style={style}></ArrowForwardIcon>
   )
 }

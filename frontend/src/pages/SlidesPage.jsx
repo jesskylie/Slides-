@@ -15,17 +15,23 @@ import Button from '@mui/material/Button';
 import NewSlideButton from '../components/NewSlideButton';
 import TextBox from '../components/TextBox';
 import Image from '../components/Image';
+import Video from '../components/Video';
+import Code from '../components/Code'
 
 export default function SlidesPage ({ token, setTokenFunction }) {
   const { presentationId, title, slideId } = useParams();
   const [pageNumber, setPageNumber] = useState('');
   const [confirmClickedText, setConfirmClickedText] = useState(false);
   const [confirmClickedImage, setConfirmClickedImage] = useState(false);
+  const [confirmClickedVideo, setConfirmClickedVideo] = useState(false);
+  const [confirmClickedCode, setConfirmClickedCode] = useState(false);
   const [slideIndex, setSlideIndex] = useState('');
   const [rightSlideIndex, setRightSlideIndex] = useState(false);
   const [slideLength, setSlideLength] = useState('');
   const [text, setText] = useState([]);
   const [image, setImage] = useState([]);
+  const [video, setVideo] = useState([]);
+  const [code, setCode] = useState([]);
 
   const navigate = useNavigate();
 
@@ -41,6 +47,14 @@ export default function SlidesPage ({ token, setTokenFunction }) {
     setConfirmClickedImage(true);
   };
 
+  const handleConfirmClickVideo = () => {
+    setConfirmClickedVideo(true);
+  };
+
+  const handleConfirmClickCode = () => {
+    setConfirmClickedCode(true);
+  };
+
   useEffect(() => {
     const getTextAndImage = async () => {
       const response = await axios.get('http://localhost:5005/store', {
@@ -51,6 +65,8 @@ export default function SlidesPage ({ token, setTokenFunction }) {
       const currStore = response.data.store.store;
       const newText = [];
       const newImage = [];
+      const newVideo = [];
+      const newCode = [];
       for (const index in currStore) {
         if (currStore[index].presentationId.toString() === presentationId) {
           const slide = currStore[index].slides.find(slide => slide.slideId.toString() === slideId);
@@ -80,11 +96,38 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                 })
               })
             }
+            if (slide.video) {
+              slide.video.forEach(video => {
+                newVideo.push({
+                  slideId: slide.slideId,
+                  videoId: video.videoId,
+                  sizeWidth: video.sizeWidth,
+                  sizeHeight: video.sizeHeight,
+                  videoURL: video.videoURL,
+                  autoplay: video.autoplay
+                })
+              })
+            }
+
+            if (slide.code) {
+              slide.code.forEach(code => {
+                newCode.push({
+                  slideId: slide.slideId,
+                  codeId: code.codeId,
+                  sizeWidth: code.sizeWidth,
+                  sizeHeight: code.sizeHeight,
+                  code: code.code,
+                  fontSize: code.fontSize
+                })
+              })
+            }
           }
         }
       }
-      setText(newText)
+      setText(newText);
       setImage(newImage);
+      setVideo(newVideo);
+      setCode(newCode);
     }
 
     if (confirmClickedText || slideId) {
@@ -96,7 +139,15 @@ export default function SlidesPage ({ token, setTokenFunction }) {
       getTextAndImage();
       setConfirmClickedImage(false);
     }
-  }, [confirmClickedText, confirmClickedImage, slideId]);
+    if (confirmClickedVideo) {
+      getTextAndImage();
+      setConfirmClickedVideo(false);
+    }
+    if (confirmClickedCode) {
+      getTextAndImage();
+      setConfirmClickedCode(false);
+    }
+  }, [confirmClickedText, confirmClickedImage, confirmClickedVideo, confirmClickedCode, slideId]);
 
   const onDelete = (event) => {
     if (event) {
@@ -140,12 +191,12 @@ export default function SlidesPage ({ token, setTokenFunction }) {
   return (
         <>
          <NavBar/>
-         <EditSideBar token={token} presentationId={presentationId} slideId={slideId} onConfirmClickText={handleConfirmClickText} onConfirmClickImage={handleConfirmClickImage}></EditSideBar>
+         <EditSideBar token={token} presentationId={presentationId} slideId={slideId} onConfirmClickText={handleConfirmClickText} onConfirmClickImage={handleConfirmClickImage} onConfirmClickVideo={handleConfirmClickVideo} onConfirmClickCode={handleConfirmClickCode}></EditSideBar>
         <h1 style={{ textAlign: 'center' }}>{title}<EditTitleModal token={token} presentationId={presentationId}/></h1>
         <div style={{ position: 'relative' }}>
-             <Card variant="outlined" sx={{ width: 1000, height: 500, borderWidth: 1.3 }}>
+          <Card variant="outlined" sx={{ width: '100%', height: 500, borderWidth: 1.3 }}>
             <CardContent>
-                <Typography variant="h5" component="div">
+              <Typography variant="h5" component="div">
                 {text
                   .filter(textItem => textItem.slideId.toString() === slideId)
                   .map(textItem => (
@@ -156,6 +207,7 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                       colour={textItem.textColour}
                       width={textItem.sizeWidth}
                       height= {textItem.sizeHeight}
+                      layer={textItem.layer}
                       onDelete={onDelete}
                     />
                   ))}
@@ -171,12 +223,37 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                           imageDescription={imageItem.imageDescription}
                         />
                     ))}
+
+                    {video
+                      .filter(videoItem => videoItem.slideId && videoItem.slideId.toString() === slideId)
+                      .map(videoItem => (
+                        <Video
+                        key={videoItem.videoId}
+                        sizeWidth={videoItem.sizeWidth}
+                        sizeHeight={videoItem.sizeHeight}
+                          videoURL={videoItem.videoURL}
+                          autoplay={videoItem.autoplay}
+                        />
+                      ))}
+
+                      {code
+                        .filter(codeItem => codeItem.slideId && codeItem.slideId.toString() === slideId)
+                        .map(codeItem => (
+                        <Code
+                        key={codeItem.videoId}
+                        sizeWidth={codeItem.sizeWidth}
+                        sizeHeight={codeItem.sizeHeight}
+                          code={codeItem.code}
+                          fontSize={codeItem.fontSize}
+                        />
+                        ))}
                 </Typography>
-                <div style={{ position: 'absolute', left: '10px', bottom: '70px' }}>
+                <div style={{ position: 'absolute', bottom: 10, left: 10 }}>
               {pageNumber}
-           </div>
+            </div>
             </CardContent>
         </Card>
+        </div>
         <DeleteSlidePrompt token={token} slideId={slideId} presentationId={presentationId} ></DeleteSlidePrompt>
         <Button onClick={gotoDashboard}>Back</Button>
         <DeletePresentationPrompt token={token} presentationId={presentationId}/>
@@ -190,9 +267,6 @@ export default function SlidesPage ({ token, setTokenFunction }) {
           </>
 
         )}
-
-        </div>
-
-        </>
+      </>
   )
 }
