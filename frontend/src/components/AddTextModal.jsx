@@ -12,7 +12,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '70%',
+  maxWidth: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -101,11 +102,16 @@ export default function AddTextModal ({ token, onConfirmClickText }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <TextField id="outlined-basic" label="Text" value={text}variant="outlined" onChange={handleNewText}/>
-          <TextField id="outlined-basic" label="Font Size" value={fontSize}variant="outlined" onChange={handleFontSize}/>
-          <TextField id="outlined-basic" label="Text Colour" value={textColour}variant="outlined" onChange={handleTextColour}/>
-          <TextField id="outlined-basic" label="Size: width" value={sizeWidth}variant="outlined" onChange={handleSizeWidth}/>
-          <TextField id="outlined-basic" label="Size: height" value={sizeHeight}variant="outlined" onChange={handleSizeHeight}/>
+          <TextField id="outlined-basic" label="Text" value={text}variant="outlined" onChange={handleNewText} fullWidth
+                sx={{ mb: 1 }}/>
+          <TextField id="outlined-basic" label="Font Size" value={fontSize}variant="outlined" onChange={handleFontSize} fullWidth
+                sx={{ mb: 1 }}/>
+          <TextField id="outlined-basic" label="Text Colour" value={textColour}variant="outlined" onChange={handleTextColour} fullWidth
+                sx={{ mb: 1 }}/>
+          <TextField id="outlined-basic" label="Size: width" value={sizeWidth}variant="outlined" onChange={handleSizeWidth} fullWidth
+                sx={{ mb: 1 }}/>
+          <TextField id="outlined-basic" label="Size: height" value={sizeHeight}variant="outlined" onChange={handleSizeHeight} fullWidth
+                sx={{ mb: 1 }}/>
           <Button onClick={handleClose}>Confirm</Button>
         </Box>
       </Modal>

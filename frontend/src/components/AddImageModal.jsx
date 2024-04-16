@@ -12,7 +12,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '70%',
+  maxWidth: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -103,10 +104,10 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
          aria-describedby="modal-modal-description"
        >
          <Box sx={style}>
-           <TextField id="outlined-basic" label="Size: width" value={sizeWidth} variant="outlined" onChange={handleSizeWidth}/>
-           <TextField id="outlined-basic" label="Size: height" value={sizeHeight} variant="outlined" onChange={handleSizeHeight}/>
-           <TextField id="outlined-basic" label="Image URL" value={imageURL} variant="outlined" onChange={handleImageURL}/>
-           <TextField id="outlined-basic" label="Image Description" value={imageDescription} variant="outlined" onChange={handleImageDescription}/>
+           <TextField id="outlined-basic" label="Size: width" value={sizeWidth} variant="outlined" onChange={handleSizeWidth} fullWidth sx={{ mb: 1 }}/>
+           <TextField id="outlined-basic" label="Size: height" value={sizeHeight} variant="outlined" onChange={handleSizeHeight} fullWidth sx={{ mb: 1 }}/>
+           <TextField id="outlined-basic" label="Image URL" value={imageURL} variant="outlined" onChange={handleImageURL} fullWidth sx={{ mb: 1 }}/>
+           <TextField id="outlined-basic" label="Image Description" value={imageDescription} variant="outlined" onChange={handleImageDescription} fullWidth sx={{ mb: 1 }}/>
            <Button onClick={handleClose}>Confirm</Button>
          </Box>
        </Modal>

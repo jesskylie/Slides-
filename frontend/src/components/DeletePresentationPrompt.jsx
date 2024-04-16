@@ -52,7 +52,13 @@ export default function DeletePresentationPrompt ({ token, presentationId }) {
 
   return (
     <React.Fragment>
-      <Button onClick={handleClickOpen}>
+      <Button variant="outlined" size="small" onClick={handleClickOpen} sx={{
+        mr: 1,
+        mt: 1,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: '100%',
+      }}>
         Delete Presentation
       </Button>
       <Dialog

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TextBox ({ text, fontSize, colour, onDelete, width, height, layer }) {
+export default function TextBox ({ text, fontSize, colour, onDelete, width, height, layer, onDoubleClick, textId }) {
   const widthAsNum = parseInt(width) * 0.01
   const heightAsNum = parseInt(height) * 0.01
   const style = {
@@ -30,7 +30,9 @@ export default function TextBox ({ text, fontSize, colour, onDelete, width, heig
 
   const handleDoubleClick = (e) => {
     e.preventDefault();
-    console.log('double clicked');
+    if (onDoubleClick) {
+      onDoubleClick(textId);
+    }
   }
 
   return (

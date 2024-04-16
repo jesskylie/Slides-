@@ -55,7 +55,7 @@ export default function DeleteSlidePrompt ({ token, slideId, presentationId }) {
 
   return (
         <React.Fragment>
-          <Button onClick={handleClickOpen}>
+          <Button variant="outlined" size="small" onClick={handleClickOpen} sx={{ mr: 1, mt: 1 }}>
             Delete Slide
           </Button>
           <Dialog

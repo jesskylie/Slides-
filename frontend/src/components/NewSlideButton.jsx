@@ -2,10 +2,6 @@ import Button from '@mui/material/Button';
 import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// creating a new slide adds another slide at end of slideshow deck
-// when slideshow deck has 2 slides, controls appear in right corner
-// left and right arrow
-// arrows take users to left and right of page
 
 export default function NewSlideButton ({ token, presentationId, title }) {
   function getRandomInt (min = 0, max = 1000) {
@@ -49,6 +45,6 @@ export default function NewSlideButton ({ token, presentationId, title }) {
     }
   }
   return (
-      <Button onClick={addNewSlide}>New slide</Button>
+      <Button variant="outlined" size="small" onClick={addNewSlide} sx={{ mr: 1, mt: 1 }}>New slide</Button>
   )
 }

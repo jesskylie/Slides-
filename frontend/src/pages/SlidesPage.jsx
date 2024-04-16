@@ -17,6 +17,7 @@ import TextBox from '../components/TextBox';
 import Image from '../components/Image';
 import Video from '../components/Video';
 import Code from '../components/Code'
+import BackgroundModal from '../components/BackgroundModal';
 
 export default function SlidesPage ({ token, setTokenFunction }) {
   const { presentationId, title, slideId } = useParams();
@@ -25,6 +26,8 @@ export default function SlidesPage ({ token, setTokenFunction }) {
   const [confirmClickedImage, setConfirmClickedImage] = useState(false);
   const [confirmClickedVideo, setConfirmClickedVideo] = useState(false);
   const [confirmClickedCode, setConfirmClickedCode] = useState(false);
+  const [confirmClickedColour, setConfirmClickedColour] = useState(false);
+  const [backgroundColour, setBackgroundColour] = useState('');
   const [slideIndex, setSlideIndex] = useState('');
   const [rightSlideIndex, setRightSlideIndex] = useState(false);
   const [slideLength, setSlideLength] = useState('');
@@ -53,6 +56,10 @@ export default function SlidesPage ({ token, setTokenFunction }) {
 
   const handleConfirmClickCode = () => {
     setConfirmClickedCode(true);
+  };
+
+  const handleConfirmClickColour = () => {
+    setConfirmClickedColour(true);
   };
 
   useEffect(() => {
@@ -121,6 +128,10 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                 })
               })
             }
+
+            if (slide.backgroundColour) {
+              setBackgroundColour(slide.backgroundColour);
+            }
           }
         }
       }
@@ -146,6 +157,11 @@ export default function SlidesPage ({ token, setTokenFunction }) {
     if (confirmClickedCode) {
       getTextAndImage();
       setConfirmClickedCode(false);
+    }
+
+    if (confirmClickedColour || slideId) {
+      getTextAndImage();
+      setConfirmClickedColour(false);
     }
   }, [confirmClickedText, confirmClickedImage, confirmClickedVideo, confirmClickedCode, slideId]);
 
@@ -183,6 +199,10 @@ export default function SlidesPage ({ token, setTokenFunction }) {
     }
   }
 
+  const handleDoubleClick = (textId) => {
+    console.log('Double-clicked TextBox ID:', textId);
+  };
+
   useEffect(() => {
     handleRightKey();
   }, [slideId])
@@ -192,9 +212,9 @@ export default function SlidesPage ({ token, setTokenFunction }) {
         <>
          <NavBar/>
          <EditSideBar token={token} presentationId={presentationId} slideId={slideId} onConfirmClickText={handleConfirmClickText} onConfirmClickImage={handleConfirmClickImage} onConfirmClickVideo={handleConfirmClickVideo} onConfirmClickCode={handleConfirmClickCode}></EditSideBar>
-        <h1 style={{ textAlign: 'center' }}>{title}<EditTitleModal token={token} presentationId={presentationId}/></h1>
+        <h1 style={{ textAlign: 'center', marginTop: '-50px' }}>{title}<EditTitleModal token={token} presentationId={presentationId}/></h1>
         <div style={{ position: 'relative' }}>
-          <Card variant="outlined" sx={{ width: '100%', height: 500, borderWidth: 1.3 }}>
+          <Card variant="outlined" sx={{ width: '100%', height: '68vh', borderWidth: 1.3, backgroundColor: backgroundColour }}>
             <CardContent>
               <Typography variant="h5" component="div">
                 {text
@@ -209,6 +229,8 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                       height= {textItem.sizeHeight}
                       layer={textItem.layer}
                       onDelete={onDelete}
+                      onDoubleClick={handleDoubleClick}
+                      textId={textItem.textId}
                     />
                   ))}
 
@@ -254,10 +276,14 @@ export default function SlidesPage ({ token, setTokenFunction }) {
             </CardContent>
         </Card>
         </div>
-        <DeleteSlidePrompt token={token} slideId={slideId} presentationId={presentationId} ></DeleteSlidePrompt>
-        <Button onClick={gotoDashboard}>Back</Button>
-        <DeletePresentationPrompt token={token} presentationId={presentationId}/>
-        <NewSlideButton token={token} presentationId={presentationId} title={title}></NewSlideButton>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button variant="outlined" size="small" onClick={gotoDashboard} sx={{ mr: 1, mt: 1 }}>Back</Button>
+          <DeleteSlidePrompt token={token} slideId={slideId} presentationId={presentationId} ></DeleteSlidePrompt>
+          <DeletePresentationPrompt token={token} presentationId={presentationId}/>
+          <NewSlideButton token={token} presentationId={presentationId} title={title}></NewSlideButton>
+          <BackgroundModal token={token} onConfirmClickColour={handleConfirmClickColour}></BackgroundModal>
+        </div>
+
         {slideIndex > 0 && (
           <LeftKey slideId={slideId} presentationId={presentationId} title={title} token={token}></LeftKey>
         )}

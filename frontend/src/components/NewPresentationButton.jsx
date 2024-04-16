@@ -12,7 +12,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '70%',
+  maxWidth: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -67,6 +68,7 @@ export default function NewPresentationButton ({ token, setToken }) {
         description,
         slides: [{
           slideId: newSlideId,
+          backgroundColour: '',
           text: [],
           image: [],
           video: [],
@@ -107,6 +109,8 @@ export default function NewPresentationButton ({ token, setToken }) {
                 variant="outlined"
                 value={title}
                 onChange={handleNewTitle}
+                fullWidth
+                sx={{ mb: 1 }}
             />
             <TextField
                 id="outlined-basic"
@@ -114,6 +118,7 @@ export default function NewPresentationButton ({ token, setToken }) {
                 variant="outlined"
                 value={description}
                 onChange={handleNewDescription}
+                fullWidth
             />
             <Button onClick={createNewPresentation}>Create</Button>
           </Box>

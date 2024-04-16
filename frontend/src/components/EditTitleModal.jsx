@@ -60,7 +60,6 @@ export default function EditTitleModal ({ token, presentationId }) {
         }
       });
       navigate(`/dashboard/${presentationId}/${newTitle}`);
-      console.log(9);
       handleClose();
     } catch (error) {
       alert(error.response.data.error);
