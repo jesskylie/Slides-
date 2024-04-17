@@ -65,6 +65,9 @@ export default function SlidesPage ({ token, setTokenFunction }) {
     setConfirmClickedColour(true);
   };
 
+  /*
+   * Gets text, image, video and code data from the data store
+  */
   useEffect(() => {
     const getTextAndImage = async () => {
       const response = await axios.get('http://localhost:5005/store', {
@@ -166,7 +169,7 @@ export default function SlidesPage ({ token, setTokenFunction }) {
       getTextAndImage();
       setConfirmClickedColour(false);
     }
-  }, [confirmClickedText, confirmClickedImage, confirmClickedVideo, confirmClickedCode, slideId]);
+  }, [confirmClickedText, confirmClickedImage, confirmClickedVideo, confirmClickedCode, confirmClickedColour, slideId]);
 
   const onDelete = (event) => {
     if (event) {
@@ -175,6 +178,9 @@ export default function SlidesPage ({ token, setTokenFunction }) {
     console.log('Element deleted');
   };
 
+  /*
+   * Checks how many slides there are in presentation
+  */
   const handleRightKey = async () => {
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -274,27 +280,23 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                         ))}
                 </Typography>
                 <div style={{ position: 'absolute', bottom: 10, left: 10 }}>
-              {pageNumber}
-            </div>
+                  {pageNumber}
+                </div>
             </CardContent>
-        </Card>
+          </Card>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant="outlined" size="small" onClick={gotoDashboard} sx={{ mr: 1, mt: 1 }}>Back</Button>
-          <DeleteSlidePrompt token={token} slideId={slideId} presentationId={presentationId} ></DeleteSlidePrompt>
+          {slideIndex > 0 && <DeleteSlidePrompt token={token} slideId={slideId} presentationId={presentationId} ></DeleteSlidePrompt>}
           <DeletePresentationPrompt token={token} presentationId={presentationId}/>
           <NewSlideButton token={token} presentationId={presentationId} title={title}></NewSlideButton>
           <BackgroundModal token={token} onConfirmClickColour={handleConfirmClickColour}></BackgroundModal>
         </div>
-
         {slideIndex > 0 && (
           <LeftKey slideId={slideId} presentationId={presentationId} title={title} token={token}></LeftKey>
         )}
         {rightSlideIndex && (slideIndex !== slideLength - 1) && (
-          <>
-            <RightKey slideId={slideId} presentationId={presentationId} title={title} token={token}></RightKey>
-          </>
-
+          <RightKey slideId={slideId} presentationId={presentationId} title={title} token={token}></RightKey>
         )}
       </>
   )

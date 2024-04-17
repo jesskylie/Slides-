@@ -11,6 +11,7 @@ export default function Login ({ token, setTokenFunction }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [error, setError] = useState('')
 
   if (token !== null) {
     return <Navigate to="/dashboard"/>
@@ -27,8 +28,18 @@ export default function Login ({ token, setTokenFunction }) {
       setTokenFunction(response.data.token);
       navigate('/dashboard');
     } catch (error) {
-      alert(error.response.data.error);
+      setError(error.response.data.error);
     }
+  }
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value)
+    setError('');
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value)
+    setError('');
   }
 
   const handleFormSubmit = (e) => {
@@ -40,14 +51,29 @@ export default function Login ({ token, setTokenFunction }) {
     <>
      <NavBar token={token}></NavBar>
      <form onSubmit={handleFormSubmit}>
-      <label>
+      <label style={{ fontFamily: 'Arial, sans-serif' }}>
         Email:
-        <input type="text" onChange={e => setEmail(e.target.value)} value={email} /><br />
+        <input
+          type="text"
+          onChange={handleEmail}
+          value={email}
+          style={{ margin: '2px' }}/><br />
       </label>
-      <label>
-        Password: <input type="text" onChange={e => setPassword(e.target.value)} value={password}/><br />
-      </label>
-        <Button type="submit" variant="contained" size="small">Login</Button>
+      <label style={{ fontFamily: 'Arial, sans-serif' }}>
+        Password:
+        <input
+          type="text"
+          onChange={handlePassword}
+          value={password}
+          style={{ margin: '2px' }}/><br />
+      </label >
+        <Button
+          type="submit"
+          variant="contained"
+          size="small">
+          Login
+        </Button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
      </form>
     </>
   )

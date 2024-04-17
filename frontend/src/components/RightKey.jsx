@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -16,6 +16,10 @@ const style = {
  */
 export default function RightKey ({ slideId, presentationId, title, token }) {
   const navigate = useNavigate();
+
+  /**
+   * Finds next slide to navigate user to next slide
+   */
   const handleNextPage = async () => {
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -38,7 +42,28 @@ export default function RightKey ({ slideId, presentationId, title, token }) {
       console.log(error)
     }
   }
+
+  /**
+ * Moves user to next page with right arrow key
+ */
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowRight') {
+      handleNextPage();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   return (
-    <ArrowForwardIcon onClick={handleNextPage} style={style}></ArrowForwardIcon>
+    <ArrowForwardIcon
+      onClick={handleNextPage}
+      onKeyDown={handleKeyDown}
+      style={style}>
+    </ArrowForwardIcon>
   )
 }

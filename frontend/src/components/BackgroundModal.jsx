@@ -25,9 +25,13 @@ const style = {
 export default function BackgroundModal ({ token, onConfirmClickColour }) {
   const { presentationId, slideId } = useParams();
   const [open, setOpen] = React.useState(false);
-  const [text, setText] = useState('');
-  const handleNewText = (e) => {
-    setText(e.target.value);
+  const [colour, setColour] = useState('');
+  const [gradient, setGradient] = useState('');
+  const handleColour = (e) => {
+    setColour(e.target.value);
+  }
+  const handleGradient = (e) => {
+    setGradient(e.target.value);
   }
   const handleOpen = () => {
     setOpen(true);
@@ -48,7 +52,7 @@ export default function BackgroundModal ({ token, onConfirmClickColour }) {
         if (newStore[index].presentationId.toString() === presentationId) {
           const slideIndex = newStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
           if (slideIndex !== -1) {
-            newStore[index].slides[slideIndex].backgroundColour = text;
+            newStore[index].slides[slideIndex].backgroundColour = colour;
           }
         }
       }
@@ -82,9 +86,16 @@ export default function BackgroundModal ({ token, onConfirmClickColour }) {
           <TextField
             id="outlined-basic"
             label="Colour"
-            value={text}
+            value={colour}
             variant="outlined"
-            onChange={handleNewText}
+            onChange={handleColour}
+            fullWidth/>
+           <TextField
+            id="outlined-basic"
+            label="Gradient (Yes/No)"
+            value={gradient}
+            variant="outlined"
+            onChange={handleGradient}
             fullWidth/>
           <Button onClick={handleClose}>Confirm</Button>
         </Box>

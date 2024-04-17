@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import NavBar from '../components/NavBar'
+import NavBar from '../components/NavBar';
+import Button from '@mui/material/Button';
 
 /**
  * Takes user to register page
@@ -11,16 +12,37 @@ export default function Register ({ token, setTokenFunction }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [error, setError] = useState('')
   const navigate = useNavigate();
 
   if (token !== null) {
     return <Navigate to="/dashboard"/>
   }
 
+  const handleEmail = (e) => {
+    setEmail(e.target.value)
+    setError('');
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value)
+    setError('');
+  }
+
+  const handleConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value)
+    setError('');
+  }
+
+  const handleName = (e) => {
+    setName(e.target.value)
+    setError('');
+  }
+
   const register = async () => {
     try {
       if (confirmPassword !== password) {
-        alert('Passwords do not match');
+        setError('Passwords do not match');
         return;
       }
       const response = await axios.post('http://localhost:5005/admin/auth/register', {
@@ -31,7 +53,7 @@ export default function Register ({ token, setTokenFunction }) {
       setTokenFunction(response.data.token);
       navigate('/dashboard');
     } catch (error) {
-      alert(error.response.data.error);
+      setError(error.response.data.error);
     }
   }
 
@@ -44,23 +66,47 @@ export default function Register ({ token, setTokenFunction }) {
       <>
         <NavBar token={token} setToken={setTokenFunction}></NavBar>
         <form onSubmit={handleRegisterSubmit}>
-          <label>
+          <label style={{ fontFamily: 'Arial, sans-serif' }}>
              Email:
-             <input type="text" onChange={e => setEmail(e.target.value)} value={email} /><br />
+             <input
+               type="text"
+               onChange={handleEmail}
+               value={email}
+               style={{ margin: '2px' }}/><br />
           </label>
-          <label>
+          <label style={{ fontFamily: 'Arial, sans-serif' }}>
             Password:
-            <input type="text" onChange={e => setPassword(e.target.value)} value={password}/><br />
+            <input
+              type="text"
+              onChange={handlePassword}
+              value={password}
+              style={{ margin: '2px' }}/><br />
           </label>
-          <label>
-            Confirm Password: <input type="text" onChange={e => setConfirmPassword(e.target.value)} value={confirmPassword}/><br />
+          <label style={{ fontFamily: 'Arial, sans-serif' }}>
+            Confirm Password:
+            <input
+              type="text"
+              onChange={handleConfirmPassword}
+              value={confirmPassword}
+              style={{ margin: '2px' }}/><br />
           </label>
-          <label>
-            Name: <input type="text" onChange={e => setName(e.target.value)} value={name}/><br />
+          <label
+            style={{ fontFamily: 'Arial, sans-serif' }}>
+            Name:
+            <input
+              type="text"
+              onChange={handleName}
+              value={name}
+              style={{ margin: '2px' }}/><br />
           </label>
-            <button type="submit">Register</button>
+          <Button
+            type="submit"
+            variant="contained"
+            size="small">
+            Register
+          </Button>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>
-
       </>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -16,6 +16,10 @@ const style = {
  */
 export default function LeftKey ({ slideId, presentationId, title, token }) {
   const navigate = useNavigate();
+
+  /**
+ * Finds previous slide to navigate user back to previous slide
+ */
   const handlePreviousPage = async () => {
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -42,7 +46,28 @@ export default function LeftKey ({ slideId, presentationId, title, token }) {
     }
   }
 
+  /**
+ * Moves user to previous page with left arrow key
+ */
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') {
+      handlePreviousPage();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   return (
-    <ArrowBackIcon onClick={handlePreviousPage} style={style}></ArrowBackIcon>
+    <ArrowBackIcon
+      onKeyDown={handleKeyDown}
+      onClick={handlePreviousPage}
+      style={style}
+    >
+    </ArrowBackIcon>
   )
 }
