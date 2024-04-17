@@ -17,7 +17,7 @@ export default function NavBar ({ token, setToken }) {
     <Box sx={{ flexGrow: 1, marginBottom: '20px' }}>
       <AppBar position="static">
         <Toolbar>
-            <SlideshowIcon></SlideshowIcon>
+            <SlideshowIcon alt='Logo of Slides'></SlideshowIcon>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Slides
           </Typography>

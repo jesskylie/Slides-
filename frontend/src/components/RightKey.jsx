@@ -63,7 +63,9 @@ export default function RightKey ({ slideId, presentationId, title, token }) {
     <ArrowForwardIcon
       onClick={handleNextPage}
       onKeyDown={handleKeyDown}
-      style={style}>
+      style={style}
+      alt='Image of right arrow'
+    >
     </ArrowForwardIcon>
   )
 }

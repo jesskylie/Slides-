@@ -67,6 +67,7 @@ export default function LeftKey ({ slideId, presentationId, title, token }) {
       onKeyDown={handleKeyDown}
       onClick={handlePreviousPage}
       style={style}
+      alt='Image of left arrow'
     >
     </ArrowBackIcon>
   )

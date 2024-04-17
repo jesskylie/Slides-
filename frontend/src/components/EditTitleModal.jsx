@@ -68,7 +68,9 @@ export default function EditTitleModal ({ token, presentationId }) {
     <>
       <ModeEditIcon
         onClick={handleOpen}
-        style={{ fontSize: '0.6em', cursor: 'pointer', paddingLeft: '8px' }}/>
+        style={{ fontSize: '0.6em', cursor: 'pointer', paddingLeft: '8px' }}
+        alt='Image of edit icon'
+      />
       <Modal
           open={open}
           onClose={handleClose}
