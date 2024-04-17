@@ -3,6 +3,9 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
+/*
+ * Logs user out of slides application
+*/
 export default function LogoutButton ({ token, setToken }) {
   const logout = async () => {
     try {
@@ -12,7 +15,6 @@ export default function LogoutButton ({ token, setToken }) {
         }
       })
       setToken(null);
-      console.log('Logged out successfully');
       localStorage.removeItem('token');
     } catch (error) {
       alert(error.response.data.error);
@@ -22,9 +24,9 @@ export default function LogoutButton ({ token, setToken }) {
     <Button
       sx={{
         color: 'inherit',
-        textDecoration: 'none', // Ensure no underline on hover
+        textDecoration: 'none',
         '&:hover': {
-          textDecoration: 'none' // Ensure no underline on hover
+          textDecoration: 'none'
         }
       }}
       component={Link}

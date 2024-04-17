@@ -20,6 +20,9 @@ const style = {
   p: 4,
 };
 
+/**
+ * Icon opens modal to allow user to edit title of presentation
+ */
 export default function EditTitleModal ({ token, presentationId }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -31,23 +34,19 @@ export default function EditTitleModal ({ token, presentationId }) {
     setTitle(e.target.value);
   }
 
+  /**
+ * Updates new title in database that user entered
+ */
   const updateTitleName = async () => {
     try {
-      // get old store
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
           Authorization: token
         }
       });
-
       const currStore = response.data.store.store;
-
-      // Get the title from the text field or provide a default value
       const newTitle = title;
-
-      // create copy of old store
       const newStore = { ...currStore };
-      // Loop through the indexs of the newStore
       for (const index in newStore) {
         const presentationIdAsString = newStore[index].presentationId.toString();
         if (presentationIdAsString === presentationId) {
@@ -65,10 +64,11 @@ export default function EditTitleModal ({ token, presentationId }) {
       alert(error.response.data.error);
     }
   }
-
   return (
     <>
-      <ModeEditIcon onClick={handleOpen} style={{ fontSize: '0.6em', cursor: 'pointer', paddingLeft: '8px' }}></ModeEditIcon>
+      <ModeEditIcon
+        onClick={handleOpen}
+        style={{ fontSize: '0.6em', cursor: 'pointer', paddingLeft: '8px' }}/>
       <Modal
           open={open}
           onClose={handleClose}

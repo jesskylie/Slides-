@@ -1,7 +1,9 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 
+/**
+ * Home page when user loads page
+ */
 export default function HomePage () {
   return (
     <>

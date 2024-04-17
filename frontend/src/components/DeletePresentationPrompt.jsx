@@ -6,6 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Opens prompt for user to delete entire presentation
+ */
 export default function DeletePresentationPrompt ({ token, presentationId }) {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -17,27 +20,24 @@ export default function DeletePresentationPrompt ({ token, presentationId }) {
     setOpen(false);
   };
 
+  /**
+   * Deletes the presentation from the database
+  */
   const handleCloseDelete = async () => {
     try {
-      // get old store
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
           Authorization: token
         }
       });
       const currStore = response.data.store.store;
-      console.log(presentationId)
-      // create copy of old store
       const newStore = { ...currStore };
-      console.log('New store before delete', JSON.stringify(newStore))
-      // Loop through the indexs of the newStore
       for (const index in newStore) {
         const presentationIdAsString = newStore[index].presentationId.toString();
         if (presentationIdAsString === presentationId) {
           delete newStore[index];
         }
       }
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
@@ -49,7 +49,6 @@ export default function DeletePresentationPrompt ({ token, presentationId }) {
       console.log(error);
     }
   }
-
   return (
     <React.Fragment>
       <Button variant="outlined" size="small" onClick={handleClickOpen} sx={{

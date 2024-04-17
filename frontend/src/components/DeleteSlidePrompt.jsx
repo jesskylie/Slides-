@@ -6,6 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Opens prompt for user to delete slide from presentation
+ */
 export default function DeleteSlidePrompt ({ token, slideId, presentationId }) {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -17,30 +20,27 @@ export default function DeleteSlidePrompt ({ token, slideId, presentationId }) {
     setOpen(false);
   };
 
+  /**
+  * Deletes slide from database
+  */
   const handleCloseDeleteSlide = async () => {
     try {
-      // get old store
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
           Authorization: token
         }
       });
       const currStore = response.data.store.store;
-      // create copy of old store
       const newStore = { ...currStore };
-      // Loop through the indexes of the newStore
       for (const index in newStore) {
         const presentationIdAsString = newStore[index].presentationId.toString();
         if (presentationIdAsString === presentationId) {
           const slideIdToFind = newStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
-          console.log(slideId);
-          console.log(slideIdToFind);
           if (slideIdToFind !== -1) {
             newStore[index].slides.splice(slideIdToFind, 1);
           }
         }
       }
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
@@ -52,7 +52,6 @@ export default function DeleteSlidePrompt ({ token, slideId, presentationId }) {
       console.log(error);
     }
   }
-
   return (
         <React.Fragment>
           <Button variant="outlined" size="small" onClick={handleClickOpen} sx={{ mr: 1, mt: 1 }}>

@@ -4,6 +4,9 @@ import axios from 'axios';
 import NavBar from '../components/NavBar';
 import Button from '@mui/material/Button';
 
+/**
+ * Login page when user clicks login
+ */
 export default function Login ({ token, setTokenFunction }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +15,9 @@ export default function Login ({ token, setTokenFunction }) {
   if (token !== null) {
     return <Navigate to="/dashboard"/>
   }
-
+  /**
+   * Calls post request to backend when user logs in
+   */
   const login = async () => {
     try {
       const response = await axios.post('http://localhost:5005/admin/auth/login', {

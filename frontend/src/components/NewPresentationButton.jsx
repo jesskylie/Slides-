@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getRandomInt } from '../helper';
 
 const style = {
   position: 'absolute',
@@ -19,7 +20,9 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
+/**
+ * Opens modal for user to create a new presentation
+ */
 export default function NewPresentationButton ({ token, setToken }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -36,31 +39,19 @@ export default function NewPresentationButton ({ token, setToken }) {
   const handleNewDescription = (e) => {
     setDescription(e.target.value);
   }
-
-  function getRandomInt (min = 0, max = 1000) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
+  /**
+ * Saves new presentation to database that user entered
+ */
   const createNewPresentation = async () => {
     try {
-      // get old store
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
           Authorization: token
         }
       });
-
       const currStore = response.data.store.store;
-
-      // Get the title from the text field or provide a default value
       const newTitle = title;
-
-      // create copy of old store
       const newStore = { ...currStore };
-
-      // send back new store to replace old store
       const newSlideId = getRandomInt();
       const newData = {
         presentationId: getRandomInt(),
@@ -75,9 +66,7 @@ export default function NewPresentationButton ({ token, setToken }) {
           code: [],
         }]
       }
-
       newStore[`${newData.title}`] = newData;
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
@@ -89,7 +78,6 @@ export default function NewPresentationButton ({ token, setToken }) {
       alert(error.response.data.error);
     }
   }
-
   return (
       <div>
         <Button variant="contained" size="small" onClick={handleOpen}>New Presentation</Button>

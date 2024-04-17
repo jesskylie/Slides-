@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { getRandomInt } from '../helper';
 
 const style = {
   position: 'absolute',
@@ -19,6 +20,9 @@ const style = {
   p: 4,
 };
 
+/**
+ * Opens modal for user to add video to presentation slide
+ */
 export default function AddVideoModal ({ token, onConfirmClickVideo }) {
   const { presentationId, slideId } = useParams();
   const [open, setOpen] = useState(false);
@@ -26,13 +30,6 @@ export default function AddVideoModal ({ token, onConfirmClickVideo }) {
   const [sizeHeight, setSizeHeight] = useState('');
   const [videoURL, setVideoURL] = useState('');
   const [autoplay, setAutoplay] = useState('');
-
-  function getRandomInt (min = 0, max = 1000) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   const handleOpen = () => setOpen(true);
 
   const handleSizeWidth = (e) => {
@@ -50,7 +47,9 @@ export default function AddVideoModal ({ token, onConfirmClickVideo }) {
   const handleAutoplay = (e) => {
     setAutoplay(e.target.value);
   }
-
+  /**
+   * Adds video data to database that user entered
+   */
   const handleClose = async () => {
     try {
       // get data
@@ -60,7 +59,7 @@ export default function AddVideoModal ({ token, onConfirmClickVideo }) {
         }
       });
       const currStore = response.data.store.store;
-      const newStore = { ...currStore }; // copy current data store to new data store
+      const newStore = { ...currStore };
       for (const index in newStore) {
         if (newStore[index].presentationId.toString() === presentationId) {
           const slideIndex = newStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
@@ -80,7 +79,6 @@ export default function AddVideoModal ({ token, onConfirmClickVideo }) {
           }
         }
       }
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
@@ -92,21 +90,46 @@ export default function AddVideoModal ({ token, onConfirmClickVideo }) {
       console.log(error)
     }
   }
-
   return (
         <div>
         <Button onClick={handleOpen}>Add Video</Button>
-       <Modal
-         open={open}
-         onClose={handleClose}
-         aria-labelledby="modal-modal-title"
-         aria-describedby="modal-modal-description"
-       >
-         <Box sx={style}>
-           <TextField id="outlined-basic" label="Size: width" value={sizeWidth} variant="outlined" onChange={handleSizeWidth} fullWidth sx={{ mb: 1 }}/>
-           <TextField id="outlined-basic" label="Size: height" value={sizeHeight} variant="outlined" onChange={handleSizeHeight} fullWidth sx={{ mb: 1 }}/>
-           <TextField id="outlined-basic" label="Video URL" value={videoURL} variant="outlined" onChange={handleVideoURL} fullWidth sx={{ mb: 1 }}/>
-           <TextField id="outlined-basic" label="AutoPlay: Yes/No" value={autoplay} variant="outlined" onChange={handleAutoplay} fullWidth sx={{ mb: 1 }}/>
+          <Modal
+           open={open}
+           onClose={handleClose}
+           aria-labelledby="modal-modal-title"
+           aria-describedby="modal-modal-description"
+          >
+           <Box sx={style}>
+             <TextField
+               id="outlined-basic"
+               label="Size: width"
+               value={sizeWidth}
+               variant="outlined"
+               onChange={handleSizeWidth}
+               fullWidth
+               sx={{ mb: 1 }}/>
+           <TextField
+             id="outlined-basic"
+             label="Size: height"
+             value={sizeHeight}
+             variant="outlined"
+             onChange={handleSizeHeight}
+             fullWidth sx={{ mb: 1 }}/>
+           <TextField
+             id="outlined-basic"
+             label="Video URL"
+             value={videoURL}
+             variant="outlined"
+             onChange={handleVideoURL}
+             fullWidth sx={{ mb: 1 }}/>
+           <TextField
+             id="outlined-basic"
+             label="AutoPlay: Yes/No"
+             value={autoplay}
+             variant="outlined"
+             onChange={handleAutoplay}
+             fullWidth
+             sx={{ mb: 1 }}/>
            <Button onClick={handleClose}>Confirm</Button>
          </Box>
        </Modal>

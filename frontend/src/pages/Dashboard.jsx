@@ -5,10 +5,13 @@ import NavBar from '../components/NavBar'
 import NewPresentationButton from '../components/NewPresentationButton';
 import PresentationCard from '../components/PresentationCard';
 
+/**
+ * Dashboard page that user sees when logged in
+ */
 export default function Dashboard ({ token, setTokenFunction }) {
   const [store, setStore] = useState({})
   const [presentation, setPresentation] = useState([]);
-  // executes this code every time something in this state changes
+
   useEffect(() => {
     axios.get('http://localhost:5005/store', {
       headers: {
@@ -23,16 +26,13 @@ export default function Dashboard ({ token, setTokenFunction }) {
     if (store && Object.keys(store).length !== 0) {
       const presentationsArray = Object.values(store);
       setPresentation(presentationsArray);
-      console.log(presentationsArray);
     }
   }, [store])
 
   if (token === null) {
     return <Navigate to="/login"/>
   }
-  console.log(store);
 
-  // else change to dashboard
   return <>
         <NavBar token={token} setToken={setTokenFunction}></NavBar>
         <h1>Dashboard</h1>

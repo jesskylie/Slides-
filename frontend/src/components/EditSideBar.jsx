@@ -9,6 +9,9 @@ import AddImageModal from './AddImageModal';
 import AddVideoModal from './AddVideoModal';
 import AddCodeModal from './AddCodeModal';
 
+/**
+ * Edit button opens sidebar for user to add text, image, code or video to the slides page
+ */
 export default function EditSideBar ({ token, presentationId, slideId, onConfirmClickText, onConfirmClickImage, onConfirmClickVideo, onConfirmClickCode }) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const toggleDrawer = (newOpen) => () => {
@@ -21,23 +24,36 @@ export default function EditSideBar ({ token, presentationId, slideId, onConfirm
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <List>
             <ListItem disablePadding>
-              <AddTextModal token={token} onConfirmClickText={onConfirmClickText} />
+              <AddTextModal
+                token={token}
+                onConfirmClickText={onConfirmClickText}
+              />
             </ListItem>
             <ListItem disablePadding>
-              <AddImageModal token={token} onConfirmClickImage={onConfirmClickImage}></AddImageModal>
+              <AddImageModal
+                token={token}
+                onConfirmClickImage={onConfirmClickImage}
+              />
             </ListItem>
             <ListItem disablePadding>
-              <AddVideoModal token={token} onConfirmClickVideo={onConfirmClickVideo}></AddVideoModal>
+              <AddVideoModal
+                token={token}
+                onConfirmClickVideo={onConfirmClickVideo}
+              />
             </ListItem>
             <ListItem disablePadding>
-              <AddCodeModal token={token} onConfirmClickCode={onConfirmClickCode}></AddCodeModal>
+              <AddCodeModal
+                token={token}
+                onConfirmClickCode={onConfirmClickCode}
+              />
             </ListItem>
         </List>
-        <Box sx={{ width: 120 }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box
+          sx={{ width: 120 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}>
         </Box>
       </Drawer>
-        <div>
-        </div>
     </div>
   );
 }

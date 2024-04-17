@@ -19,6 +19,9 @@ import Video from '../components/Video';
 import Code from '../components/Code'
 import BackgroundModal from '../components/BackgroundModal';
 
+/**
+ * Takes user to page with all slides in presentation
+ */
 export default function SlidesPage ({ token, setTokenFunction }) {
   const { presentationId, title, slideId } = useParams();
   const [pageNumber, setPageNumber] = useState('');

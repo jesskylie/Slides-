@@ -19,7 +19,9 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
+/**
+ * Opens modal for user to change background of presentation slide
+ */
 export default function BackgroundModal ({ token, onConfirmClickColour }) {
   const { presentationId, slideId } = useParams();
   const [open, setOpen] = React.useState(false);
@@ -30,17 +32,18 @@ export default function BackgroundModal ({ token, onConfirmClickColour }) {
   const handleOpen = () => {
     setOpen(true);
   };
-
+    /**
+   * Saves background colour that user entered into database
+   */
   const handleClose = async () => {
     try {
-      // get data
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
           Authorization: token
         }
       });
       const currStore = response.data.store.store;
-      const newStore = { ...currStore }; // copy current data store to new data store
+      const newStore = { ...currStore };
       for (const index in newStore) {
         if (newStore[index].presentationId.toString() === presentationId) {
           const slideIndex = newStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
@@ -49,7 +52,6 @@ export default function BackgroundModal ({ token, onConfirmClickColour }) {
           }
         }
       }
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
@@ -61,10 +63,15 @@ export default function BackgroundModal ({ token, onConfirmClickColour }) {
       console.log(error)
     }
   }
-
   return (
     <div>
-       <Button variant="outlined" size="small" onClick={handleOpen} sx={{ mt: 1 }}>Change background</Button>
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={handleOpen}
+        sx={{ mt: 1 }}>
+        Change background
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -72,7 +79,13 @@ export default function BackgroundModal ({ token, onConfirmClickColour }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <TextField id="outlined-basic" label="Colour" value={text}variant="outlined" onChange={handleNewText} fullWidth/>
+          <TextField
+            id="outlined-basic"
+            label="Colour"
+            value={text}
+            variant="outlined"
+            onChange={handleNewText}
+            fullWidth/>
           <Button onClick={handleClose}>Confirm</Button>
         </Box>
       </Modal>

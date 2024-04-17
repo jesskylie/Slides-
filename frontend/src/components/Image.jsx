@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Image that is added to slide page
+ */
 export default function Image ({ sizeWidth, sizeHeight, imageURL, imageDescription }) {
   const widthAsNum = parseInt(sizeWidth) * 0.01
   const heightAsNum = parseInt(sizeHeight) * 0.01
@@ -10,9 +13,6 @@ export default function Image ({ sizeWidth, sizeHeight, imageURL, imageDescripti
   };
 
   return (
-    <>
-        <img src={imageURL} alt={imageDescription} style={style}></img>
-    </>
-
+    <img src={imageURL} alt={imageDescription} style={style}></img>
   );
 }

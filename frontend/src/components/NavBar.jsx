@@ -8,6 +8,9 @@ import { Link, useLocation } from 'react-router-dom';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import LogoutButton from '../components/LogoutButton';
 
+/**
+ * Navigation bar that allows user to login, logout or register
+ */
 export default function NavBar ({ token, setToken }) {
   const location = useLocation();
   return (

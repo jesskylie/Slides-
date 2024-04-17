@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { getRandomInt } from '../helper';
 
 const style = {
   position: 'absolute',
@@ -20,6 +21,10 @@ const style = {
   p: 4,
 };
 
+/**
+ * Modal opens when add image is clicked
+ * Allows user to add images to the presentation slide
+ */
 export default function AddImageModal ({ token, onConfirmClickImage }) {
   const { presentationId, slideId } = useParams();
   const [open, setOpen] = useState(false);
@@ -27,12 +32,6 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
   const [sizeHeight, setSizeHeight] = useState('');
   const [imageURL, setImageURL] = useState('');
   const [imageDescription, setImageDescription] = useState('');
-
-  function getRandomInt (min = 0, max = 1000) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 
   const handleOpen = () => setOpen(true);
 
@@ -51,7 +50,9 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
   const handleImageDescription = (e) => {
     setImageDescription(e.target.value);
   }
-
+  /**
+ * Stores image data in database when confirm is clicked
+ */
   const handleClose = async () => {
     try {
       // get data
@@ -61,7 +62,7 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
         }
       });
       const currStore = response.data.store.store;
-      const newStore = { ...currStore }; // copy current data store to new data store
+      const newStore = { ...currStore };
       for (const index in newStore) {
         if (newStore[index].presentationId.toString() === presentationId) {
           const slideIndex = newStore[index].slides.findIndex(slide => slide.slideId.toString() === slideId);
@@ -75,13 +76,12 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
               sizeHeight,
               imageURL,
               imageDescription,
-              layer: newStore[index].slides[slideIndex].image.length + 1 // Assign layer based on current image count
+              layer: newStore[index].slides[slideIndex].image.length + 1
             };
             newStore[index].slides[slideIndex].image.push(newImage);
           }
         }
       }
-
       await axios.put('http://localhost:5005/store', { store: newStore }, {
         headers: {
           Authorization: token
@@ -93,24 +93,50 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
       console.log(error)
     }
   }
-
   return (
         <div>
-        <Button onClick={handleOpen}>Add Image</Button>
-       <Modal
-         open={open}
-         onClose={handleClose}
-         aria-labelledby="modal-modal-title"
-         aria-describedby="modal-modal-description"
-       >
-         <Box sx={style}>
-           <TextField id="outlined-basic" label="Size: width" value={sizeWidth} variant="outlined" onChange={handleSizeWidth} fullWidth sx={{ mb: 1 }}/>
-           <TextField id="outlined-basic" label="Size: height" value={sizeHeight} variant="outlined" onChange={handleSizeHeight} fullWidth sx={{ mb: 1 }}/>
-           <TextField id="outlined-basic" label="Image URL" value={imageURL} variant="outlined" onChange={handleImageURL} fullWidth sx={{ mb: 1 }}/>
-           <TextField id="outlined-basic" label="Image Description" value={imageDescription} variant="outlined" onChange={handleImageDescription} fullWidth sx={{ mb: 1 }}/>
-           <Button onClick={handleClose}>Confirm</Button>
-         </Box>
-       </Modal>
-     </div>
+          <Button onClick={handleOpen}>Add Image</Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+           <Box sx={style}>
+             <TextField
+               id="outlined-basic"
+               label="Size: width"
+               value={sizeWidth}
+               variant="outlined"
+               onChange={handleSizeWidth}
+               fullWidth
+               sx={{ mb: 1 }}/>
+             <TextField
+               id="outlined-basic"
+               label="Size: height"
+               value={sizeHeight}
+               variant="outlined"
+               onChange={handleSizeHeight}
+               fullWidth sx={{ mb: 1 }}/>
+             <TextField
+               id="outlined-basic"
+               label="Image URL"
+               value={imageURL}
+               variant="outlined"
+               onChange={handleImageURL}
+               fullWidth
+               sx={{ mb: 1 }}/>
+             <TextField
+               id="outlined-basic"
+               label="Image Description"
+               value={imageDescription}
+               variant="outlined"
+               onChange={handleImageDescription}
+               fullWidth
+               sx={{ mb: 1 }}/>
+             <Button onClick={handleClose}>Confirm</Button>
+           </Box>
+         </Modal>
+       </div>
   )
 }

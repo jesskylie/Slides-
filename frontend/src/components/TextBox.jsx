@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Text box that is added to slide
+ */
 export default function TextBox ({ text, fontSize, colour, onDelete, width, height, layer, onDoubleClick, textId }) {
   const widthAsNum = parseInt(width) * 0.01
   const heightAsNum = parseInt(height) * 0.01
@@ -16,7 +19,6 @@ export default function TextBox ({ text, fontSize, colour, onDelete, width, heig
     overflow: 'hidden',
     zIndex: layer
   };
-
   if (text) {
     style.border = '2px solid #d4d4d4';
   }

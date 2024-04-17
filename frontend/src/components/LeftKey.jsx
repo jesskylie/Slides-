@@ -3,8 +3,17 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// this left key will take back to previous page
+const style = {
+  position: 'absolute',
+  bottom: 0,
+  right: 30,
+  textAlign: 'left',
+  cursor: 'pointer'
+}
 
+/**
+ * Left key will take user back to previous slide in presentation
+ */
 export default function LeftKey ({ slideId, presentationId, title, token }) {
   const navigate = useNavigate();
   const handlePreviousPage = async () => {
@@ -21,11 +30,9 @@ export default function LeftKey ({ slideId, presentationId, title, token }) {
           if (currSlideIndex === 0) {
             navigate(`/dashboard/${presentationId}/${title}`);
           }
-          console.log(currSlideIndex);
           const nextSlideIndex = currSlideIndex - 1;
           if (nextSlideIndex < currStore[key].slides.length) {
             const nextSlideId = currStore[key].slides[nextSlideIndex].slideId;
-            console.log(nextSlideId);
             navigate(`/dashboard/${presentationId}/${title}/${nextSlideId}`);
           }
         }
@@ -33,14 +40,6 @@ export default function LeftKey ({ slideId, presentationId, title, token }) {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  const style = {
-    position: 'absolute',
-    bottom: 0,
-    right: 30,
-    textAlign: 'left',
-    cursor: 'pointer'
   }
 
   return (

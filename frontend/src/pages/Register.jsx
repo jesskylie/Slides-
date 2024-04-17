@@ -3,6 +3,9 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar'
 
+/**
+ * Takes user to register page
+ */
 export default function Register ({ token, setTokenFunction }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
