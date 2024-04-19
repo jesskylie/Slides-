@@ -236,7 +236,6 @@ export default function SlidesPage ({ token, setTokenFunction }) {
                       colour={textItem.textColour}
                       width={textItem.sizeWidth}
                       height= {textItem.sizeHeight}
-                      layer={textItem.layer}
                       onDelete={onDelete}
                       onDoubleClick={handleDoubleClick}
                       textId={textItem.textId}

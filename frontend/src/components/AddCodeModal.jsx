@@ -77,7 +77,6 @@ export default function AddCodeModal ({ token, onConfirmClickCode }) {
               sizeHeight,
               code,
               fontSize,
-              layer: newStore[index].slides[slideIndex].image.length + 1 // Assign layer based on current image count
             };
             newStore[index].slides[slideIndex].code.push(newCode);
           }

@@ -76,7 +76,6 @@ export default function AddImageModal ({ token, onConfirmClickImage }) {
               sizeHeight,
               imageURL,
               imageDescription,
-              layer: newStore[index].slides[slideIndex].image.length + 1
             };
             newStore[index].slides[slideIndex].image.push(newImage);
           }

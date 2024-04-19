@@ -73,7 +73,6 @@ export default function AddVideoModal ({ token, onConfirmClickVideo }) {
               sizeHeight,
               videoURL,
               autoplay,
-              layer: newStore[index].slides[slideIndex].image.length + 1
             };
             newStore[index].slides[slideIndex].video.push(newVideo);
           }
